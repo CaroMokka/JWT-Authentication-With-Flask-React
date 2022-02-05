@@ -2,20 +2,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			users: [],
+			user: {}
 		},
 		actions: {
+			//aca esta la funcion(viene con los parametros desde registro.js)y dentro  en handleSubmit() especificamente, todo esto usando actions.setRegistro(datosRegistro);
+			//aca debo declarar mi funcion que llamara a la api, y lo hare con un fetch el metodo(get, post, delete, update) depende de que se solicite
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
@@ -41,6 +33,15 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			//recordar declarar la funcion en AppContext, en el useEffect
+			//aqui tiene que venir de parametros los datos del registro que ingresaron por Registro componente. almacenados en el estado(useState)
+			setRegistro: () => {
+				//tengo que especificar el metodo POST, headers(que se trata de un archivo Json), body (JSON.stringify(estado))
+				fetch("https://3001-4geeksacademy-reactflask-7438xuazf0k.ws-us30.gitpod.io/api/user")
+					.then(resp => resp.json())
+					.then(data => setStore({ users: data.users }))
+					.catch(error => console.log("Error loading message from backend", error));
 			}
 		}
 	};
