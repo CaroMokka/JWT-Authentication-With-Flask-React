@@ -1,5 +1,8 @@
 import React, { useState, useContext } from "react";
 import { Context } from "../store/appContext";
+import { Lista } from "../component/lista";
+
+//componente controlado, react manda el control aqui sobre los input o elementeos html
 
 export const Registro = () => {
   const { store, actions } = useContext(Context);
@@ -9,8 +12,8 @@ export const Registro = () => {
     email: "",
     password: "",
   });
-  const [validation, setValidation] = useState(false);
-  const [error, setError] = useState("");
+  const [validation, setValidation] = useState(true);
+  
 
   //Aqui declaro mis controladores de form
   const handleChange = ({ target: { name, value } }) => {
@@ -20,10 +23,16 @@ export const Registro = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(datosRegistro);
-  };
+    //validacion de formmulario
+    if(datosRegistro.name !== "" || datosRegistro.email !== "" || datosRegistro.password !== ""){
+      console.log(datosRegistro); //captura datos ingresados
+      setDatosRegistro({name: "", email:"", password:""});
+      setValidation(true);
+    } else 
+      setValidation(false)
+   };
 
-  // actions.setRegistro();
+  actions.setRegistro(datosRegistro);
 
   //Aqui tengo que obtener los datos que entrar del formulario registro onchange
   //luego tengo con la function handleChange() debo intervenir en el estado de mi app,
@@ -46,6 +55,7 @@ export const Registro = () => {
             />
           </div>
         </div>
+        {!validation && <div className="validation text-danger">Debe ingresar un nombre</div>}
         <div className="mb-3 row">
           <label className="col-sm-2 col-form-label">Email</label>
           <div className="col-sm-10">
@@ -57,6 +67,7 @@ export const Registro = () => {
               value={datosRegistro.email}
             />
           </div>
+          {!validation && <div className="validation text-danger">Debe ingresar un email</div>}
         </div>
         <div className="mb-3 row">
           <label htmlFor="inputPassword" className="col-sm-2 col-form-label">
@@ -71,13 +82,15 @@ export const Registro = () => {
               value={datosRegistro.password}
             />
           </div>
+          {!validation && <div className="validation text-danger">Debe ingresar un password</div>}
         </div>
         <div className="row">
-          <button type="button" className="btn btn-dark btn-sm m-auto w-25">
+          <button type="submit" className="btn btn-dark btn-sm m-auto w-25">
             Submit
           </button>
         </div>
       </form>
+     
     </div>
   );
 };

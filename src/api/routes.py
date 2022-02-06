@@ -25,27 +25,36 @@ def get_users():
     return jsonify(all_users), 200
 
 
-#falta arreglar la validacion ------------>>>>> POST
+#Esta almacenando la indo del Front perooofalta arreglar la validacion ------------>>>>> POST 
 @api.route('/user', methods=['POST'])
 def create_user():
     #request_body_user = request.get_json()
     name = request.json.get("name", None)
     email = request.json.get("email", None)
     password = request.json.get("password", None)
+
+    if name != "test" or email != "test" or password != "test":
+           return jsonify({ "msg" : "ingresar bien los datos"}), 401
+
+    
+    user = User( name=name, email=email, password=password)
+    db.session.add(user)
+    db.session.commit() 
+    return jsonify({"msg": "Usuario registrado exitosamente"}), 200    
     #Validaciones
     #if request_body_user is None:
-     #   return jsonify({"msg": "Debe ingresar datos"}), 400
-    print(email)
+    #   return jsonify({"msg": "Debe ingresar datos"}), 400
+    #print(name, email, password)
     # test es igual a texto en el input ---
-    if name != "test" :
+    """ if name is None:
         return jsonify({"msg": "Debe ingresar nombre"}), 400
     print(name)    
 
-    if email == None : 
+    if email is None: 
         return jsonify({"msg": "Debe ingresar email"}), 400 
     print(email)
 
-    if password != "test" :
+    if password is None:
         return jsonify({"msg": "Debe ingresar password"}), 400
     print(password)  
 
@@ -57,5 +66,5 @@ def create_user():
         user = User(name=name, email=email, password=password) 
         db.session.add(user)
         db.session.commit() 
-        return jsonify({"msg": "Usuario registrado exitosamente"}), 200            
+        return jsonify({"msg": "Usuario registrado exitosamente"}), 200 """            
       
